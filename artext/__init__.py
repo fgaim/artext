@@ -1,2 +1,2 @@
-import utils
-from artext import Artext
+from artext import utils
+from artext.artext import Artext

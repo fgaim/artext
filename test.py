@@ -1,6 +1,5 @@
 import sys
-import utils
-from artext import Artext
+from artext import utils, Artext
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ import logging
 import operator
 import argparse
 
-import inflect
+import artext.inflect
 
 
 log = logging.getLogger('artext')
@@ -31,8 +31,8 @@ def arg_parser():
                         help='String to separate noise samples of a sentence')
     parser.add_argument('-er', '--error_rate', type=float,
                         help='Error rate in decimal, eg. 0.3')
-    parser.add_argument('-l', '--level', choices=['sent', 'doc'],
-                        help='Level at which to generate noises', default='all')
+    parser.add_argument('-l', '--level', choices=['sent', 'doc'], default='sent',
+                        help='Level at which to generate noises')
     parser.add_argument('-c', '--config', type=str, default='config.ini',
                         help='Configuration file')
 

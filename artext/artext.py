@@ -6,9 +6,9 @@ import configparser as ConfigParser
 from nltk.tokenize.treebank import TreebankWordDetokenizer
 import spacy
 
-from utils import log
-import inflect
-from word_level import WordNoiser
+from artext.utils import log
+from artext import inflect
+from artext.word_level import WordNoiser
 
 
 nlp = spacy.load('en_core_web_sm')

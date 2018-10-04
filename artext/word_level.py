@@ -1,7 +1,7 @@
 import random
 
-import utils
-from utils import log
+from artext import utils
+from artext.utils import log
 
 
 
