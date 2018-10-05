@@ -45,6 +45,13 @@ class Artext:
         self.pos_verb = self.config.get("verb-form", "target_verb").split('|')
         self.pos_adj = self.config.get("adjective", "target_adj").split('|')
 
+        # load protected list
+        if args.protected_tokens:
+            with open(args.protected_tokens, 'r') as fin:
+                self.protected_tokens = set([line.lower().strip() for line in fin])
+        else:
+            self.protected_tokens = set()
+
         self.samples = args.samples
         self.separator = args.separator
         self.word_noiser = WordNoiser()
@@ -110,6 +117,10 @@ class Artext:
 
         for _i, tok in enumerate(parsed_sent):
             rand1, rand2 = random.random(), random.random()
+
+            if tok.text.lower() in self.protected_tokens:
+                ug_src.append(tok.text)
+                continue
 
             # Orthographic errors
             if rand1 >= prob and rand2 <= self.error_typo and len(tok.text) > 4:
