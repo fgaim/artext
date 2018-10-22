@@ -5,7 +5,7 @@ import string
 import configparser as ConfigParser
 
 from nltk.tokenize.treebank import TreebankWordDetokenizer
-from nltk.corpus import wordnet
+from nltk.corpus import wordnet as wn
 import spacy
 
 from artext.utils import log
@@ -191,7 +191,7 @@ class Artext:
                     ug_src.append(self.pluralize_verb(tok.text))
                 elif rand2 <= 0.60:
                     ug_src.append(self.present_participle(tok.text))
-                elif rand2 <= 0.80:
+                elif rand2 <= 0.90:
                     synonyms = self.synonyms_verb(tok.text)
                     if not len(synonyms):
                         synonyms = [tok.text]
@@ -224,7 +224,7 @@ class Artext:
 
             else:
                 ug_src.append(tok.text)
-                log.debug('Skipped: ' + tok.tag_)
+                log.debug('UNK POS: ' + tok.tag_)
 
         return self.detok([t for t in ug_src if t])
 
@@ -253,7 +253,7 @@ class Artext:
         assert word, 'No word!'
         assert pos, 'No POS!'
 
-        synsets = wordnet.synsets(word, pos)
+        synsets = wn.synsets(word, pos)
         synonyms = set()
         for synset in synsets:
             for synonym in synset.lemmas():
@@ -263,10 +263,13 @@ class Artext:
         return list(synonyms)
 
     def synonyms_noun(self, word):
-        return self.get_sysnonyms(word, 'n')
+        return self.get_sysnonyms(word, wn.NOUN)
 
     def synonyms_verb(self, word):
-        return self.get_sysnonyms(word, 'v')
+        return self.get_sysnonyms(word, wn.VERB)
+
+    def synonyms_adv(self, word):
+        return self.get_sysnonyms(word, wn.ADV)
 
     def synonyms_adj(self, word):
-        return self.get_sysnonyms(word, 'a')
+        return self.get_sysnonyms(word, wn.ADJ)
