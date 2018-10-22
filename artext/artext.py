@@ -173,8 +173,13 @@ class Artext:
 
             # Nouns
             elif rand1 >= prob and tok.tag_ in self.pos_noun:
-                if rand2 <= 0.5:
+                if rand2 <= 0.50:
                     ug_src.append(self.singularize_noun(tok.text))
+                elif rand2 <= 0.80:
+                    synonyms = self.synonyms_noun(tok.text)
+                    if not len(synonyms):
+                        synonyms = [tok.text]
+                    ug_src.append(random.sample(synonyms, 1)[0])
                 else:
                     ug_src.append(self.pluralize(tok.text))
 
@@ -186,15 +191,27 @@ class Artext:
                     ug_src.append(self.pluralize_verb(tok.text))
                 elif rand2 <= 0.60:
                     ug_src.append(self.present_participle(tok.text))
+                elif rand2 <= 0.80:
+                    synonyms = self.synonyms_verb(tok.text)
+                    if not len(synonyms):
+                        synonyms = [tok.text]
+                    ug_src.append(random.sample(synonyms, 1)[0])
                 else:
                     ug_src.append(tok.text)
 
             # Adjectives
             elif rand1 >= prob and tok.tag_ in self.pos_adj:
-                if rand2 <= 0.5:
+                if rand2 <= 0.40:
                     ug_src.append(self.pluralize_adj(tok.text))
-                else:
+                elif rand2 <= 0.70:
+                    synonyms = self.synonyms_adj(tok.text)
+                    if not len(synonyms):
+                        synonyms = [tok.text]
+                    ug_src.append(random.sample(synonyms, 1)[0])
+                elif rand2 <= 0.90:
                     ug_src.append(tok.text)
+                else:
+                    pass
 
             # Punctuation
             elif rand1 >= prob and tok.tag_ in self.punc_list:
