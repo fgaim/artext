@@ -45,6 +45,7 @@ class Artext:
         self.pos_prep = "IN"
         self.pos_noun = self.config.get("noun-number", "target_noun").split('|')
         self.pos_verb = self.config.get("verb-form", "target_verb").split('|')
+        self.pos_adv = self.config.get("adverb", "target_adv").split('|')
         self.pos_adj = self.config.get("adjective", "target_adj").split('|')
 
         # load protected list
@@ -199,6 +200,16 @@ class Artext:
                 else:
                     ug_src.append(tok.text)
 
+            # Adverbs
+            elif rand1 >= prob and tok.tag_ in self.pos_adv:
+                if rand2 <= 0.50:
+                    synonyms = self.synonyms_adv(tok.text)
+                    if not len(synonyms):
+                        synonyms = [tok.text]
+                    ug_src.append(random.sample(synonyms, 1)[0])
+                else:
+                    ug_src.append(tok.text)
+
             # Adjectives
             elif rand1 >= prob and tok.tag_ in self.pos_adj:
                 if rand2 <= 0.40:
@@ -208,7 +219,7 @@ class Artext:
                     if not len(synonyms):
                         synonyms = [tok.text]
                     ug_src.append(random.sample(synonyms, 1)[0])
-                elif rand2 <= 0.90:
+                elif rand2 <= 0.96:
                     ug_src.append(tok.text)
                 else:
                     pass
