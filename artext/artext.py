@@ -7,6 +7,7 @@ import configparser as ConfigParser
 from nltk.tokenize.treebank import TreebankWordDetokenizer
 from nltk.corpus import wordnet as wn
 import spacy
+from spacy.symbols import ORTH
 
 from artext.utils import log
 from artext import inflect
@@ -49,11 +50,12 @@ class Artext:
         self.pos_adj = self.config.get("adjective", "target_adj").split('|')
 
         # load protected list
+        self.protected_tokens = set()
         if args.protected_tokens:
             with open(args.protected_tokens, 'r') as fin:
                 self.protected_tokens = set([line.lower().strip() for line in fin])
-        else:
-            self.protected_tokens = set()
+        for pt in self.protected_tokens:
+            nlp.tokenizer.add_special_case(pt, [{ORTH: pt}])
 
         self.samples = args.samples
         self.separator = args.separator
