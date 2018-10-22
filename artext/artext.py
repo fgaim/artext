@@ -195,10 +195,10 @@ class Artext:
                     ug_src.append(tok.text)
 
             # Punctuation
-            elif tok.text in self.punc_list:
-                if rand2 <= 0.70:
+            elif rand1 >= prob and tok.tag_ in self.punc_list:
+                if rand2 <= 0.30:
                     ug_src.append(tok.text)
-                elif rand1 <= 0.80:
+                elif rand2 <= 0.80:
                     ug_src.append(random.sample(self.punc_list, 1)[0])
                 else:
                     pass
