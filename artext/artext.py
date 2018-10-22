@@ -3,7 +3,9 @@ import os
 import random
 import string
 import configparser as ConfigParser
+
 from nltk.tokenize.treebank import TreebankWordDetokenizer
+from nltk.corpus import wordnet
 import spacy
 
 from artext.utils import log
@@ -229,3 +231,25 @@ class Artext:
     def present_participle(self, word):
         uw = self.inf.present_participle(word)
         return uw if uw else word
+
+    def get_sysnonyms(self, word, pos):
+        assert word, 'No word!'
+        assert pos, 'No POS!'
+
+        synsets = wordnet.synsets(word, pos)
+        synonyms = set()
+        for synset in synsets:
+            for synonym in synset.lemmas():
+                synonym = synonym.name()
+                if synonym.isalpha() and word != synonym:
+                    synonyms.add(synonym)
+        return list(synonyms)
+
+    def synonyms_noun(self, word):
+        return self.get_sysnonyms(word, 'n')
+
+    def synonyms_verb(self, word):
+        return self.get_sysnonyms(word, 'v')
+
+    def synonyms_adj(self, word):
+        return self.get_sysnonyms(word, 'a')
