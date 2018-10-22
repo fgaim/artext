@@ -4,8 +4,6 @@ import logging
 import operator
 import argparse
 
-import artext.inflect
-
 
 log = logging.getLogger('artext')
 fmt = '%(asctime)s %(levelname)s:%(message)s '

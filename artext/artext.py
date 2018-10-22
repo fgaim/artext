@@ -182,7 +182,7 @@ class Artext:
                     ug_src.append(tok.lemma_)
                 elif rand2 <= 0.30:
                     ug_src.append(self.pluralize_verb(tok.text))
-                elif rand2 <= 0.50:
+                elif rand2 <= 0.60:
                     ug_src.append(self.present_participle(tok.text))
                 else:
                     ug_src.append(tok.text)
