@@ -13,10 +13,14 @@ Therefore use with caution specially when the target models are neural networks.
 
 
 ## Setup
-Python >= v. 3.5
 
+Code developed and tested with `Python 3.6`.  
+
+Install required packages as follows:
 ```
-Install required packages.
+pip install -r requirements.txt
+python -m spacy.load('en_core_web_sm')
+python -m nltk.download('punckt')
 ```
 
 
