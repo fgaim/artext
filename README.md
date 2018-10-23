@@ -4,7 +4,7 @@
 Artext is a work on intentionally injecting noise into text without affecting the text's core meaning to human reader.
 This kind of data can be useful for many NLP tasks, particulary to make models robust to erroneous text. 
 This is a work in progress, we will publish the results of our experiments soon.
-Meanwhile, if you `artext` in your research please cite this repository.
+Meanwhile, if you use `artext` in your research please cite this repository.
 
 ```
 Note: Noising will generally increase the vocabulary size, as it introduces word inflections and spelling variations.
@@ -22,9 +22,10 @@ Install required packages.
 
 ## Usage
 
-To generate sentence-level noisy samples of text in 
+Generate sentence or document level noisy samples for a text file using `inject.py` as follows.  
+Use `-h` to show all options.
 ```
-python artext/inject.py -src source.txt -out output.txt -l sent -er 0.5 -n 10 -sep '|||'
+python inject.py -src source.txt -out output.txt -l sent -er 0.5 -n 10 -sep '|||'
 ```
 
 
@@ -32,7 +33,7 @@ python artext/inject.py -src source.txt -out output.txt -l sent -er 0.5 -n 10 -s
 
 
 ```
-python artext/test.py -er 0.5 -n 100
+python test.py -er 0.5 -n 20
 ```
 
 #### Sentence Level Examples
