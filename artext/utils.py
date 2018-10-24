@@ -27,8 +27,8 @@ def arg_parser():
                         help='Number of noise samples to generate per sentence')
     parser.add_argument('-sep', '--separator', type=str, default='\n',
                         help='String to separate noise samples of a sentence')
-    parser.add_argument('-er', '--error_rate', type=float, default=0.3,
-                        help='Error rate in decimal, eg. 0.3')
+    parser.add_argument('-er', '--error_rate', type=float, default=0.25,
+                        help='Error rate in decimal, eg. 0.25')
     parser.add_argument('-l', '--level', choices=['sent', 'doc'], default='sent',
                         help='Level at which to generate noises')
     parser.add_argument('-pt', '--protected_tokens', type=str, default=None,

@@ -1,7 +1,7 @@
 class Config:
     # [general]
     error_overall = True
-    error_rate_overall = 0.9
+    error_rate_overall = 0.25
 
     # [determiner]
     pos_determiner = ['DET']
