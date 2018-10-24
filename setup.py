@@ -1,11 +1,13 @@
 import setuptools
 
+from artext import __version__
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="artext",
-    version="0.2.2",
+    version=__version__,
     author="Fitsum Gaim",
     author_email="fitsum@geezlab.com",
     description="Probabilistic Noising of Natural Language",
