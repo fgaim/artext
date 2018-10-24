@@ -2,3 +2,5 @@
 </s>
 <unk>
 <pad>
+<bos>
+<eos>
