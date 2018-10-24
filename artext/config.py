@@ -48,3 +48,4 @@ class Config:
     # [runtime]
     samples = 1
     separator = '\n'
+    path_protected_tokens = None
