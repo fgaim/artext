@@ -8,6 +8,7 @@ from nltk.corpus import wordnet as wn
 import spacy
 from spacy.symbols import ORTH
 
+from artext.config import Config
 from artext.utils import log
 from artext import inflect
 from artext.word_level import WordNoiser
@@ -22,7 +23,7 @@ class Artext:
     TODO: Implement Semantic (synonym) errors
     """
 
-    def __init__(self, config):
+    def __init__(self, config=Config()):
         self.config = config
 
         self.error_overall = self.config.error_overall
@@ -45,14 +46,14 @@ class Artext:
         self.protected_tokens = set()
         if self.config.path_protected_tokens:
             with open(self.config.path_protected_tokens, 'r') as fin:
-                self.protected_tokens = set([line.lower().strip() for line in fin])
+                self.protected_tokens = set(
+                    [line.lower().strip() for line in fin])
         for pt in self.protected_tokens:
             nlp.tokenizer.add_special_case(pt, [{ORTH: pt}])
 
         self.word_noiser = WordNoiser()
         self.inf = inflect.Inflect()
         self.detok = TreebankWordDetokenizer().detokenize
-
 
     def noise_document(self, doc):
         """
@@ -102,7 +103,6 @@ class Artext:
             noises.add(self._inject_noise(parsed_sent))
 
         return tuple(noises)
-
 
     def _inject_noise(self, parsed_sent):
         """
@@ -232,31 +232,25 @@ class Artext:
 
         return self.detok([t for t in ug_src if t])
 
-
     def singularize_noun(self, word):
         uw = self.inf.singular_noun(word)
         return uw if uw else word
-
 
     def pluralize(self, word):
         uw = self.inf.plural(word)
         return uw if uw else word
 
-
     def pluralize_verb(self, word):
         uw = self.inf.plural_verb(word)
         return uw if uw else word
-
 
     def pluralize_adj(self, word):
         uw = self.inf.plural_adj(word)
         return uw if uw else word
 
-
     def present_participle(self, word):
         uw = self.inf.present_participle(word)
         return uw if uw else word
-
 
     def get_sysnonyms(self, word, pos):
         assert word, 'No word!'
@@ -271,18 +265,14 @@ class Artext:
                     synonyms.add(synonym)
         return list(synonyms)
 
-
     def synonyms_noun(self, word):
         return self.get_sysnonyms(word, wn.NOUN)
-
 
     def synonyms_verb(self, word):
         return self.get_sysnonyms(word, wn.VERB)
 
-
     def synonyms_adv(self, word):
         return self.get_sysnonyms(word, wn.ADV)
-
 
     def synonyms_adj(self, word):
         return self.get_sysnonyms(word, wn.ADJ)
