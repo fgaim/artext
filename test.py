@@ -1,12 +1,18 @@
 import sys
-from artext import utils, Artext
+from artext import config, utils, Artext
 
 
 if __name__ == "__main__":
     parser = utils.arg_parser()
     args = parser.parse_args('-src test -out test -n 5'.split() + sys.argv[1:])
 
-    artxt = Artext(args)
+    conf = config.Config()
+    conf.error_overall = args.error_rate
+    conf.path_protected_tokens = args.protected_tokens
+    conf.samples = args.samples
+    conf.separator = args.separator
+
+    artxt = Artext(config=conf)
 
     # Sentence Level
     print('Sentence Level')
