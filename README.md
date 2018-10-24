@@ -7,8 +7,9 @@ This is a work in progress, we will publish the results of our experiments soon.
 Meanwhile, if you use `artext` in your research please cite this repository.
 
 ```
-Note: Noising will generally increase the vocabulary size, as it introduces word inflections and spelling variations.
-Therefore use with caution specially when the target models are neural networks.
+Note: Noising will generally increase the vocabulary size, as it introduces word inflections 
+and spelling variations. Therefore use it with caution, specially when the target models are
+neural networks.
 ```
 
 
@@ -21,7 +22,7 @@ Using `pip`:
 pip install artext
 ```
 
-From source:
+[or] from source repository:
 ```
 git clone https://github.com/fgaim/artext
 cd artext
@@ -38,7 +39,7 @@ python -m nltk.download('punckt')
 
 ## Usage
 
-#### Use from commandline
+#### Use from command-line
 Generate sentence or document level noisy samples for a text file follows.
 Use `-h` to show all options.
 ```
@@ -51,7 +52,7 @@ python inject.py -src source.txt -out output.txt -l sent -er 0.5 -n 10
 ```
 
 #### Use programmatically
-```
+```python
 from artext import Artext
 
 artxt = Artext()
