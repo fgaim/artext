@@ -1,3 +1,7 @@
 __pycache__
 .vscode/
+dist/
+build/
+artext.egg-info/
 log.txt
+pypi.sh
