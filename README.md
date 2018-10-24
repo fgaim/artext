@@ -14,11 +14,23 @@ Therefore use with caution specially when the target models are neural networks.
 
 ## Setup
 
-Code developed and tested with `Python 3.6`.  
+Developed and tested with `Python 3.6`.  
 
-Install required packages as follows:
+Using `pip`:
 ```
+pip install artext
+```
+
+From source:
+```
+git clone https://github.com/fgaim/artext
+cd artext
 pip install -r requirements.txt
+python setup.py install
+```
+
+Install required resources:
+```
 python -m spacy.load('en_core_web_sm')
 python -m nltk.download('punckt')
 ```
@@ -26,12 +38,28 @@ python -m nltk.download('punckt')
 
 ## Usage
 
-Generate sentence or document level noisy samples for a text file using `inject.py` as follows.  
+#### Use from commandline
+Generate sentence or document level noisy samples for a text file follows.
 Use `-h` to show all options.
 ```
-python inject.py -src source.txt -out output.txt -l sent -er 0.5 -n 10 -sep '|||'
+python -m artext -src source.txt -out output.txt -l sent -er 0.5 -n 10
 ```
 
+[or] From source code using `inject.py` as follows.
+```
+python inject.py -src source.txt -out output.txt -l sent -er 0.5 -n 10
+```
+
+#### Use programmatically
+```
+from artext import Artext
+
+artxt = Artext()
+artxt.samples = 5
+sent = 'This is a sample sentence, to be noised.'
+noises = artxt.noise_sentence(sent)
+print(noises)
+```
 
 ## Examples
 
