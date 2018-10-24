@@ -119,11 +119,11 @@ class Artext:
                 continue
 
             # Orthographic errors
-            if rand1 >= prob and rand2 <= self.error_typo and len(tok.text) > 4:
+            if rand1 >= prob and rand2 <= self.error_typo and len(tok.text) > 3:
                 typo = self.word_noiser.noise_word(tok.text)
                 noise_sent.append(typo)
 
-            # Swap current and last words
+            # Swap current and previous words
             elif rand1 >= prob and rand2 <= self.error_swap and len(noise_sent) > 0 and 1 < _i < len(parsed_sent)-1:
                 ug_pop = noise_sent.pop()
                 noise_sent.append(tok.text)
@@ -221,7 +221,7 @@ class Artext:
 
             # Punctuation
             elif rand1 >= prob and tok.tag_ in self.punc_list:
-                if rand2 <= 0.30:
+                if rand2 <= 0.60:
                     noise_sent.append(tok.text)
                 elif rand2 <= 0.80:
                     noise_sent.append(random.sample(self.punc_list, 1)[0])
@@ -231,6 +231,11 @@ class Artext:
             else:
                 noise_sent.append(tok.text)
                 log.debug('UNK POS: ' + tok.tag_)
+
+            # Redundant Punctuation
+            if rand1 >= prob and tok.tag_ not in self.punc_list:
+                if rand2 <= 0.02:
+                    noise_sent.append(random.sample(self.punc_list, 1)[0])
 
         return self.detok([t for t in noise_sent if t])
 
