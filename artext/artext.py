@@ -108,129 +108,131 @@ class Artext:
         """
         Inject errors according to an overall rate.
         """
-        ug_src = []
+        noise_sent = []
         prob = 1. - self.config.error_rate_overall
 
         for _i, tok in enumerate(parsed_sent):
             rand1, rand2 = random.random(), random.random()
 
             if tok.text.lower() in self.protected_tokens:
-                ug_src.append(tok.text)
+                noise_sent.append(tok.text)
                 continue
 
             # Orthographic errors
             if rand1 >= prob and rand2 <= self.error_typo and len(tok.text) > 4:
                 typo = self.word_noiser.noise_word(tok.text)
-                ug_src.append(typo)
+                noise_sent.append(typo)
 
             # Swap current and last words
-            elif rand1 >= prob and rand2 <= self.error_swap and len(ug_src) > 0 and 1 < _i < len(parsed_sent)-1:
-                ug_pop = ug_src.pop()
-                ug_src.append(tok.text)
-                ug_src.append(ug_pop)
+            elif rand1 >= prob and rand2 <= self.error_swap and len(noise_sent) > 0 and 1 < _i < len(parsed_sent)-1:
+                ug_pop = noise_sent.pop()
+                noise_sent.append(tok.text)
+                noise_sent.append(ug_pop)
 
             # Determiners/Articles
             elif rand1 >= prob and tok.tag_ == self.pos_det:
                 if tok.text.lower() in self.determiner_list:
                     if rand2 <= 0.15:
-                        ug_src.append('a')
+                        noise_sent.append('a')
                     elif rand2 <= 0.30:
-                        ug_src.append('an')
+                        noise_sent.append('an')
                     elif rand2 <= 0.45:
-                        ug_src.append('the')
-                    elif rand2 <= 0.80 or len(ug_src) == 0:
-                        ug_src.append(tok.text)
-                    elif len(ug_src) > 0:
+                        noise_sent.append('the')
+                    elif rand2 <= 0.80 or len(noise_sent) == 0:
+                        noise_sent.append(tok.text)
+                    elif len(noise_sent) > 0:
                         pass
                 else:
                     if rand2 <= 0.35:
-                        ug_src.append(self.pluralize(tok.text))
-                    elif rand2 <= 0.85 or len(ug_src) == 0:
-                        ug_src.append(tok.text)
-                    elif len(ug_src) > 0:
+                        noise_sent.append(self.pluralize(tok.text))
+                    elif rand2 <= 0.85 or len(noise_sent) == 0:
+                        noise_sent.append(tok.text)
+                    elif len(noise_sent) > 0:
                         pass
 
             # Prepositions
             elif rand1 >= prob and tok.tag_ == self.pos_prep and tok.text.lower() in self.prep_list:
                 if rand2 <= 0.10:
-                    ug_src.append('in')
+                    noise_sent.append('in')
                 elif rand2 <= 0.20:
-                    ug_src.append('on')
+                    noise_sent.append('on')
                 elif rand2 <= 0.30:
-                    ug_src.append('to')
+                    noise_sent.append('to')
                 elif rand2 <= 0.40:
-                    ug_src.append('for')
+                    noise_sent.append('for')
                 elif rand2 <= 0.80:
-                    ug_src.append(random.sample(self.prep_list, 1)[0])
+                    noise_sent.append(random.sample(self.prep_list, 1)[0])
                 else:
                     pass
 
             # Nouns
             elif rand1 >= prob and tok.tag_ in self.pos_noun:
-                if rand2 <= 0.50:
-                    ug_src.append(self.singularize_noun(tok.text))
+                if rand2 <= 0.45:
+                    noise_sent.append(self.singularize_noun(tok.text))
                 elif rand2 <= 0.80:
+                    noise_sent.append(self.pluralize(tok.text))
+                elif rand2 <= 0.90:
                     synonyms = self.synonyms_noun(tok.text)
                     if not len(synonyms):
                         synonyms = [tok.text]
-                    ug_src.append(random.sample(synonyms, 1)[0])
+                    noise_sent.append(random.sample(synonyms, 1)[0])
                 else:
-                    ug_src.append(self.pluralize(tok.text))
+                    noise_sent.append(tok.text)
 
             # Verbs
             elif rand1 >= prob and tok.tag_ in self.pos_verb:
                 if rand2 <= 0.20:
-                    ug_src.append(tok.lemma_)
-                elif rand2 <= 0.30:
-                    ug_src.append(self.pluralize_verb(tok.text))
-                elif rand2 <= 0.60:
-                    ug_src.append(self.present_participle(tok.text))
+                    noise_sent.append(tok.lemma_)
+                elif rand2 <= 0.45:
+                    noise_sent.append(self.pluralize_verb(tok.text))
+                elif rand2 <= 0.75:
+                    noise_sent.append(self.present_participle(tok.text))
                 elif rand2 <= 0.90:
                     synonyms = self.synonyms_verb(tok.text)
                     if not len(synonyms):
                         synonyms = [tok.text]
-                    ug_src.append(random.sample(synonyms, 1)[0])
+                    noise_sent.append(random.sample(synonyms, 1)[0])
                 else:
-                    ug_src.append(tok.text)
+                    noise_sent.append(tok.text)
 
             # Adverbs
             elif rand1 >= prob and tok.tag_ in self.pos_adv:
-                if rand2 <= 0.50:
+                if rand2 <= 0.35:
                     synonyms = self.synonyms_adv(tok.text)
                     if not len(synonyms):
                         synonyms = [tok.text]
-                    ug_src.append(random.sample(synonyms, 1)[0])
+                    noise_sent.append(random.sample(synonyms, 1)[0])
                 else:
-                    ug_src.append(tok.text)
+                    noise_sent.append(tok.text)
 
             # Adjectives
             elif rand1 >= prob and tok.tag_ in self.pos_adj:
                 if rand2 <= 0.40:
-                    ug_src.append(self.pluralize_adj(tok.text))
+                    noise_sent.append(self.pluralize_adj(tok.text))
                 elif rand2 <= 0.70:
                     synonyms = self.synonyms_adj(tok.text)
                     if not len(synonyms):
                         synonyms = [tok.text]
-                    ug_src.append(random.sample(synonyms, 1)[0])
+                    noise_sent.append(random.sample(synonyms, 1)[0])
                 elif rand2 <= 0.96:
-                    ug_src.append(tok.text)
+                    noise_sent.append(tok.text)
                 else:
                     pass
 
             # Punctuation
             elif rand1 >= prob and tok.tag_ in self.punc_list:
                 if rand2 <= 0.30:
-                    ug_src.append(tok.text)
+                    noise_sent.append(tok.text)
                 elif rand2 <= 0.80:
-                    ug_src.append(random.sample(self.punc_list, 1)[0])
+                    noise_sent.append(random.sample(self.punc_list, 1)[0])
                 else:
                     pass
 
             else:
-                ug_src.append(tok.text)
+                noise_sent.append(tok.text)
                 log.debug('UNK POS: ' + tok.tag_)
 
-        return self.detok([t for t in ug_src if t])
+        return self.detok([t for t in noise_sent if t])
 
     def singularize_noun(self, word):
         uw = self.inf.singular_noun(word)
