@@ -31,8 +31,6 @@ def arg_parser():
                         help='Error rate in decimal, eg. 0.3')
     parser.add_argument('-l', '--level', choices=['sent', 'doc'], default='sent',
                         help='Level at which to generate noises')
-    parser.add_argument('-c', '--config', type=str, default='config.ini',
-                        help='Error-distribution configuration file')
     parser.add_argument('-pt', '--protected_tokens', type=str, default=None,
                         help='A file listing tokens to be excluded from noising')
 

@@ -4,14 +4,20 @@ import random
 import argparse
 import configparser as ConfigParser
 
-from artext import utils, Artext
+from artext import config, utils, Artext
 
 
 if __name__ == "__main__":
     parser = utils.arg_parser()
     args = parser.parse_args()
 
-    artxt = Artext(args)
+    conf = config.Config()
+    conf.error_overall = args.error_rate
+    conf.path_protected_tokens = args.protected_tokens
+    conf.samples = args.samples
+    conf.separator = args.separator
+
+    artxt = Artext(config=conf)
 
     with open(args.source, 'r') as fin, open(args.output, 'w') as fout:
         if args.level == 'sent':
