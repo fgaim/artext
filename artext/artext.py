@@ -2,7 +2,6 @@ import sys
 import os
 import random
 import string
-import configparser as ConfigParser
 
 from nltk.tokenize.treebank import TreebankWordDetokenizer
 from nltk.corpus import wordnet as wn
@@ -20,45 +19,36 @@ nlp = spacy.load('en_core_web_sm')
 class Artext:
     """
     Natural Language Noise Generator.
-    TODO: Implement Punctuation errors
     TODO: Implement Semantic (synonym) errors
     """
 
-    def __init__(self, args):
-        # Config
-        self.config = ConfigParser.RawConfigParser()
-        self.config.read(args.config)
-        if args.error_rate:
-            self.config.set("general", "error_overall", 'True')
-            self.config.set("general", "error_rate_overall", args.error_rate)
+    def __init__(self, config):
+        self.config = config
 
-        # for k in self.config.sections():
-        #    for _item in self.config.items(k):
-        #        print(_item)
+        self.error_overall = self.config.error_overall
+        self.error_typo = self.config.error_rate_typo
+        self.error_swap = self.config.error_rate_swap
+        self.prep_list = self.config.target_preposition
+        self.determiner_list = self.config.target_determiner
+        self.punc_list = self.config.target_punc
+        self.pos_det = self.config.pos_determiner
+        self.pos_prep = self.config.pos_preposition
+        self.pos_noun = self.config.pos_noun
+        self.pos_verb = self.config.pos_verb
+        self.pos_adv = self.config.pos_adv
+        self.pos_adj = self.config.pos_adj
 
-        self.error_overall = self.config.getboolean("general", "error_overall")
-        self.error_typo = self.config.getfloat("spelling", "error_rate_typo")
-        self.error_swap = self.config.getfloat("swap", "error_rate_swap")
-        self.prep_list = self.config.get("preposition", "target_preposition").split('|')
-        self.determiner_list = self.config.get("determiner", "target_determiner").split('|')
-        self.punc_list = self.config.get("punctuation", "target_punc").split('|')
-        self.pos_det = "DT"
-        self.pos_prep = "IN"
-        self.pos_noun = self.config.get("noun-number", "target_noun").split('|')
-        self.pos_verb = self.config.get("verb-form", "target_verb").split('|')
-        self.pos_adv = self.config.get("adverb", "target_adv").split('|')
-        self.pos_adj = self.config.get("adjective", "target_adj").split('|')
+        self.samples = self.config.samples
+        self.separator = self.config.separator
 
         # load protected list
         self.protected_tokens = set()
-        if args.protected_tokens:
-            with open(args.protected_tokens, 'r') as fin:
+        if self.config.path_protected_tokens:
+            with open(self.config.path_protected_tokens, 'r') as fin:
                 self.protected_tokens = set([line.lower().strip() for line in fin])
         for pt in self.protected_tokens:
             nlp.tokenizer.add_special_case(pt, [{ORTH: pt}])
 
-        self.samples = args.samples
-        self.separator = args.separator
         self.word_noiser = WordNoiser()
         self.inf = inflect.Inflect()
         self.detok = TreebankWordDetokenizer().detokenize
@@ -113,12 +103,13 @@ class Artext:
 
         return tuple(noises)
 
+
     def _inject_noise(self, parsed_sent):
         """
-        Inject errors according to an overall probability.
+        Inject errors according to an overall rate.
         """
         ug_src = []
-        prob = 1. - self.config.getfloat("general", "error_rate_overall")
+        prob = 1. - self.config.error_rate_overall
 
         for _i, tok in enumerate(parsed_sent):
             rand1, rand2 = random.random(), random.random()
@@ -246,21 +237,26 @@ class Artext:
         uw = self.inf.singular_noun(word)
         return uw if uw else word
 
+
     def pluralize(self, word):
         uw = self.inf.plural(word)
         return uw if uw else word
+
 
     def pluralize_verb(self, word):
         uw = self.inf.plural_verb(word)
         return uw if uw else word
 
+
     def pluralize_adj(self, word):
         uw = self.inf.plural_adj(word)
         return uw if uw else word
 
+
     def present_participle(self, word):
         uw = self.inf.present_participle(word)
         return uw if uw else word
+
 
     def get_sysnonyms(self, word, pos):
         assert word, 'No word!'
@@ -275,14 +271,18 @@ class Artext:
                     synonyms.add(synonym)
         return list(synonyms)
 
+
     def synonyms_noun(self, word):
         return self.get_sysnonyms(word, wn.NOUN)
+
 
     def synonyms_verb(self, word):
         return self.get_sysnonyms(word, wn.VERB)
 
+
     def synonyms_adv(self, word):
         return self.get_sysnonyms(word, wn.ADV)
+
 
     def synonyms_adj(self, word):
         return self.get_sysnonyms(word, wn.ADJ)
