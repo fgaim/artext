@@ -1,15 +1,15 @@
 # Artext: Artificial Text Generation
-### Probabilistic Noisig of Natural Languages
+### Probabilistic Noising of Natural Language
 
-Artext is a work on intentionally injecting noise into text without affecting the text's core meaning to human reader.
+Artext is a work on injecting noise into text without affecting the its core meaning to a human reader.
 This kind of data can be useful for many NLP tasks, particulary to make models robust to erroneous text. 
 This is a work in progress, we will publish the results of our experiments soon.
 Meanwhile, if you use `artext` in your research please cite this repository.
 
 ```
 Note: Noising will generally increase the vocabulary size, as it introduces word inflections 
-and spelling variations. Therefore use it with caution, specially when the target models are
-neural networks.
+and spelling variations. Therefore, use it with caution, especially when the target models are
+closed vocabulary neural networks.
 ```
 
 
