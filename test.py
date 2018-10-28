@@ -1,11 +1,10 @@
-import sys
 import unittest
-from artext import config, utils, Artext
 
 
 class ArtextTestCase(unittest.TestCase):
 
     def test_args(self):
+        from artext import utils
         parser = utils.arg_parser()
         args = parser.parse_args('-src test -out test -n 5'.split())
         self.assertEqual(args.source, 'test')
@@ -13,6 +12,7 @@ class ArtextTestCase(unittest.TestCase):
         self.assertEqual(args.samples, 5)
 
     def test_noise_sentence(self):
+        from artext import config, Artext
         conf = config.Config()
         artxt = Artext(config=conf)
 
@@ -23,6 +23,7 @@ class ArtextTestCase(unittest.TestCase):
         self.assertEqual(len(noises), conf.samples)
 
     def test_noise_document(self):
+        from artext import config, Artext
         conf = config.Config()
         artxt = Artext(config=conf)
 
@@ -31,3 +32,7 @@ class ArtextTestCase(unittest.TestCase):
         noises = artxt.noise_document(doc)
         self.assertNotEqual(noises, None)
         self.assertEqual(len(noises), conf.samples)
+
+    def test(self):
+        # TODO: Write proper test here
+        pass
