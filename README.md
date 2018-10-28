@@ -1,4 +1,10 @@
 # Artext: Artificial Text Generation
+[![LICENSE](https://img.shields.io/github/license/fgaim/artext.svg)](https://github.com/fgaim/artext/blob/master/LICENSE)
+![GitHub issues](https://img.shields.io/github/issues/fgaim/artext.svg)
+[![PyPI](https://img.shields.io/pypi/v/artext.svg)](https://pypi.org/project/artext/)
+[![CircleCI](https://circleci.com/gh/fgaim/artext.svg?style=shield)](https://circleci.com/gh/fgaim/artext)
+
+
 ### Probabilistic Noising of Natural Language
 
 Artext is a work on injecting noise into text without affecting the its core meaning to a human reader.
