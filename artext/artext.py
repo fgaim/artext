@@ -19,8 +19,7 @@ nlp = spacy.load('en_core_web_sm')
 
 class Artext:
     """
-    Natural Language Noise Generator.
-    TODO: Implement Semantic (synonym) errors
+    Artificial noise generation of Natural Language.
     """
 
     def __init__(self, config=Config()):
@@ -59,6 +58,9 @@ class Artext:
         """
         Generates 'samples' number of noises for a document.
 
+        Args:
+            doc: str, multi-sentence text
+
         Returns:
             tuple: noises
         """
@@ -93,6 +95,9 @@ class Artext:
         """
         Generates 'samples' number of noises for a sentence.
 
+        Args:
+            sent: str, a sentence
+
         Returns:
             tuple: noises
         """
@@ -107,11 +112,14 @@ class Artext:
     def _inject_noise(self, parsed_sent):
         """
         Inject errors according to an overall rate.
+
+        Returns:
+            str: noised sentence
         """
         noised_sent = []
         prob = 1. - self.config.error_rate_overall
 
-        for idx, tok in enumerate(parsed_sent):
+        for tok in parsed_sent:
             rand1, rand2 = random.random(), random.random()
 
             if tok.text.lower() in self.protected_tokens:
