@@ -1,34 +1,35 @@
 # Artext: Artificial Text Generation
+
 [![LICENSE](https://img.shields.io/github/license/fgaim/artext.svg)](https://github.com/fgaim/artext/blob/master/LICENSE)
 ![GitHub issues](https://img.shields.io/github/issues/fgaim/artext.svg)
 [![PyPI](https://img.shields.io/pypi/v/artext.svg)](https://pypi.org/project/artext/)
 [![CircleCI](https://circleci.com/gh/fgaim/artext.svg?style=shield)](https://circleci.com/gh/fgaim/artext)
 
 
-### Probabilistic Noising of Natural Language
+## Probabilistic Noising of Natural Language
 
-Artext is a work on injecting noise into text without affecting the its core meaning to a human reader.
-This kind of data can be useful for many NLP tasks, particulary to make models robust to erroneous text. 
-This is a work in progress, we will publish the results of our experiments soon.
+Artext is a work on injecting noise into text without affecting the core meaning for a human reader.
+This kind of data can be useful for many NLP tasks, particulary in making models robust to noisy/erroneous input.
+
+
+This is a work in progress, and the result of our experiments we will published soon.
 Meanwhile, if you use `artext` in your research please cite this repository.
 
-```
-Note: Noising will generally increase the vocabulary size, as it introduces word inflections 
-and spelling variations. Therefore, use it with caution, especially when the target models are
-closed vocabulary neural networks.
-```
+> Note: Noising will generally increase the vocabulary size of the data sets, as it introduces word inflections and orthographic variations. Therefore, use it with caution, especially with closed vocabulary neural network models. Consider using subword based vocabulary (for example `BPE`) in such scenarios.
+
 
 
 ## Setup
 
-Developed and tested with `Python 3.6`.  
+'artext' is developed and tested with `Python 3.6`, and can be install in two ways:
 
-Using `pip`:
-```
-pip install artext
-```
+1. Using `pip`:
 
-[or] from source repository:
+```
+ pip install artext
+ ```
+
+2. From source code:
 ```
 git clone https://github.com/fgaim/artext
 cd artext
@@ -36,7 +37,7 @@ pip install -r requirements.txt
 python setup.py install
 ```
 
-Install required resources:
+Get required resources:
 ```
 python -m spacy.load('en_core_web_sm')
 python -m nltk.download('punckt')
@@ -45,9 +46,9 @@ python -m nltk.download('punckt')
 
 ## Usage
 
-#### Use from command-line
-Generate sentence or document level noisy samples for a text file follows.
-Use `-h` to show all options.
+### Use from command-line
+
+Generate sentence or document level noisy samples for a text file as follows:
 ```
 python -m artext -src source.txt -out output.txt -l sent -er 0.5 -n 10
 ```
@@ -57,13 +58,17 @@ python -m artext -src source.txt -out output.txt -l sent -er 0.5 -n 10
 python inject.py -src source.txt -out output.txt -l sent -er 0.5 -n 10
 ```
 
-#### Use programmatically
+Use `-h` to see all options.
+
+
+### Use as a library
 ```python
 from artext import Artext
 
 artxt = Artext()
 artxt.samples = 5
-sent = 'This is a sample sentence, to be noised.'
+artxt.error_overall = 0.25
+sent = 'This is a sample sentence to be noised.'
 noises = artxt.noise_sentence(sent)
 print(noises)
 ```
@@ -72,10 +77,10 @@ print(noises)
 
 
 ```
-python test.py -er 0.5 -n 20
+python example.py -er 0.5 -n 20
 ```
 
-#### Sentence Level Examples
+### Sentence Level Examples
 ```
 Input:
 This person tried to keep an eye on the president while doing his work.
@@ -104,7 +109,7 @@ Noises:
 ```
 
 
-#### Document Level Examples
+### Document Level Examples
 ```
 Input:
 I went to Iceland for vacation. The top of the mountain was very cold. Fortunately, I was wearing snowboard gear.
