@@ -15,13 +15,13 @@ This kind of data can be useful for many NLP tasks, particulary in making models
 This is a work in progress, and the result of our experiments we will published soon.
 Meanwhile, if you use `artext` in your research please cite this repository.
 
-> Note: Noising will generally increase the vocabulary size of the data sets, as it introduces word inflections and orthographic variations. Therefore, use it with caution, especially with closed vocabulary neural network models. Consider using subword based vocabulary (for example `BPE`) in such scenarios.
+> Note: Noising will generally increase the vocabulary size of the data sets, as it introduces word inflections and orthographic variations that may not have existed before. Therefore, use it with caution, especially for closed-vocabulary neural network models such as machine translation. Consider using subword based vocabulary (`BPE` for instance) in such scenarios.
 
 
 
 ## Setup
 
-'artext' is developed and tested with `Python 3.6`, and can be install in two ways:
+`artext`'s developed and tested with `Python 3.6` and can be installed in two ways:
 
 1. Using `pip`:
 
@@ -38,9 +38,10 @@ python setup.py install
 ```
 
 Get required resources:
-```
-python -m spacy.load('en_core_web_sm')
-python -m nltk.download('punckt')
+```bash
+python -m spacy download 'en_core_web_sm'
+python -m nltk.downloader 'punkt'
+python -m nltk.downloader 'wordnet'
 ```
 
 
@@ -48,7 +49,7 @@ python -m nltk.download('punckt')
 
 ### Use from command-line
 
-Generate sentence or document level noisy samples for a text file as follows:
+Generate sentence or document level noise samples for a text file as follows:
 ```
 python -m artext -src source.txt -out output.txt -l sent -er 0.5 -n 10
 ```
