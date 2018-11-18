@@ -263,9 +263,9 @@ class Artext:
 
             # Punctuation
             elif tok.tag_ in self.punc_list:
-                if rand2 <= 0.60:
+                if rand2 <= 0.75:
                     noised_sent.append(tok.text)
-                elif rand2 <= 0.80:
+                elif rand2 <= 0.85:
                     noised_sent.append(random.sample(self.punc_list, 1)[0])
                 else:
                     pass
