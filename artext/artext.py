@@ -3,18 +3,16 @@ import os
 import random
 import string
 
-from nltk.tokenize.treebank import TreebankWordDetokenizer
-from nltk.corpus import wordnet as wn
 import spacy
 from spacy.symbols import ORTH
+from nltk.corpus import wordnet as wn
+from nltk.tokenize.treebank import TreebankWordDetokenizer
 
 from artext.config import Config
 from artext.utils import log
-from artext import inflect
+from artext.inflect import Inflect
 from artext.word_level import WordNoiser
 
-
-nlp = spacy.load('en_core_web_sm')
 
 
 class Artext:
@@ -25,9 +23,11 @@ class Artext:
     def __init__(self, config=Config()):
         self.config = config
 
+        self.samples = self.config.samples
         self.error_rate = self.config.error_rate
         self.error_typo = self.config.error_rate_typo
         self.error_swap = self.config.error_rate_swap
+
         self.prep_list = self.config.target_preposition
         self.determiner_list = self.config.target_determiner
         self.punc_list = self.config.target_punc
@@ -38,21 +38,50 @@ class Artext:
         self.pos_adv = self.config.pos_adv
         self.pos_adj = self.config.pos_adj
 
-        self.samples = self.config.samples
-        self.separator = self.config.separator
+        self.word_noiser = WordNoiser()
+        self.inflect = Inflect()
+        self.detok = TreebankWordDetokenizer().detokenize
+        self.nlp = spacy.load('en_core_web_sm')
 
         # load protected list
         self.protected_tokens = set()
-        if self.config.path_protected_tokens:
-            with open(self.config.path_protected_tokens, 'r') as fin:
-                self.protected_tokens = set(
-                    [line.lower().strip() for line in fin])
-        for pt in self.protected_tokens:
-            nlp.tokenizer.add_special_case(pt, [{ORTH: pt}])
+        self.load_protected_tokens_from_path(self.config.path_protected_tokens)
 
-        self.word_noiser = WordNoiser()
-        self.inf = inflect.Inflect()
-        self.detok = TreebankWordDetokenizer().detokenize
+
+    def load_protected_tokens_from_path(self, path):
+        """
+        Loads list of protected tokens from given file.
+        File should contain one token per line.
+
+        Args:
+            path: str, path to text file
+        """
+
+        if path is None:
+            return
+
+        with open(path, 'r') as fin:
+            ptoks = fin.readlines()
+            self.add_protected_tokens(ptoks)
+
+
+    def add_protected_tokens(self, ptoks):
+        """
+        Adds protected tokens that will be skipped during noising.
+
+        Args:
+            ptoks: list/tuple/set, tokens
+        """
+
+        if ptoks is None or not len(ptoks):
+            return
+
+        new_pts = set([tok.strip().lower() for tok in ptoks])
+        self.protected_tokens = self.protected_tokens.union(new_pts)
+
+        for pt in new_pts:
+            self.nlp.tokenizer.add_special_case(pt, [{ORTH: pt}])
+
 
     def noise_document(self, doc):
         """
@@ -64,7 +93,7 @@ class Artext:
         Returns:
             tuple: noises
         """
-        parsed_doc = nlp(doc.strip())
+        parsed_doc = self.nlp(doc.strip())
 
         doc_noises = list()
         for sent in parsed_doc.sents:
@@ -101,7 +130,7 @@ class Artext:
         Returns:
             tuple: noises
         """
-        parsed_sent = nlp(sent.strip())
+        parsed_sent = self.nlp(sent.strip())
 
         noises = set()
         while len(noises) < self.samples:
@@ -260,35 +289,35 @@ class Artext:
 
     def singularize_noun(self, word):
         try:
-            uw = self.inf.singular_noun(word)
+            uw = self.inflect.singular_noun(word)
             return uw if uw else word
         except:
             return word
 
     def pluralize(self, word):
         try:
-            uw = self.inf.plural(word)
+            uw = self.inflect.plural(word)
             return uw if uw else word
         except:
             return word
 
     def pluralize_verb(self, word):
         try:
-            uw = self.inf.plural_verb(word)
+            uw = self.inflect.plural_verb(word)
             return uw if uw else word
         except:
             return word
 
     def pluralize_adj(self, word):
         try:
-            uw = self.inf.plural_adj(word)
+            uw = self.inflect.plural_adj(word)
             return uw if uw else word
         except:
             return word
 
     def present_participle(self, word):
         try:
-            uw = self.inf.present_participle(word)
+            uw = self.inflect.present_participle(word)
             return uw if uw else word
         except:
             return word
