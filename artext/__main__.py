@@ -7,7 +7,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     conf = config.Config()
-    conf.error_overall = args.error_rate
+    conf.error_rate = args.error_rate
     conf.path_protected_tokens = args.protected_tokens
     conf.samples = args.samples
     conf.separator = args.separator

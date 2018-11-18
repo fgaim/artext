@@ -1,7 +1,6 @@
 class Config:
     # [general]
-    error_overall = True
-    error_rate_overall = 0.25
+    error_rate = 0.25
 
     # [determiner]
     pos_determiner = ['DET']
@@ -40,7 +39,7 @@ class Config:
     error_rate_punctuation = 0.5
 
     # [spelling]
-    error_rate_typo = 0.1
+    error_rate_typo = 0.09
 
     # [swap]
     error_rate_swap = 0.05
