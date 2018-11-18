@@ -50,7 +50,6 @@ class WordNoiser():
             elif rand <= 0.95:
                 uword = self.swap_char(uword)
             else:
-                #uword = self.keyboard_typo(uword)
                 pass
 
         return uword
@@ -62,12 +61,11 @@ class WordNoiser():
         TODO test [vowel or double] only.
         """
 
-        log.debug("drop change---before: %s" % word)
         pos = utils.rand_index(word)
         if pos == 0:
             pos += 1  # don't drop first letter of a word
         uword = word[:pos] + word[pos+1:]
-        log.debug("drop change---after: %s" % word)
+        log.debug("[drop char] {} -> {}: %s".format(word, uword))
         return uword
 
 
@@ -76,12 +74,11 @@ class WordNoiser():
         Randomly add vowel to word.
         """
 
-        log.debug("addition change---before: %s" % word)
         pos = utils.rand_index(word)
         addition = random.choice(list(word+'aeiou'))
-        word = word[:pos] + addition + word[pos:]
-        log.debug("addition change---after: %s" % word)
-        return word
+        uword = word[:pos] + addition + word[pos:]
+        log.debug("[add char] {} -> {}: %s".format(word, uword))
+        return uword
 
 
     def swap_char(self, word):
@@ -89,12 +86,11 @@ class WordNoiser():
         Randomly swap two neighboring letters in a word.
         """
 
-        log.debug("swap change---before: %s" % word)
         pos = utils.rand_index(word)
         i, j = (pos - 1, pos) if pos > 0 else (pos, pos + 1)
-        word = word[:i] + word[j] + word[i] + word[j + 1:]
-        log.debug("swap change---after: %s" %  word)
-        return word
+        uword = word[:i] + word[j] + word[i] + word[j + 1:]
+        log.debug("[swap char] {} -> {}: %s".format(word, uword))
+        return uword
 
 
     def flip_char(self, word):
@@ -102,13 +98,12 @@ class WordNoiser():
         Randomly flip letters between two positions in a word.
         """
 
-        log.debug("flip change---before: %s" % word)
         i, j = utils.rand_index(word), utils.rand_index(word)
         if i > j:
             i, j = j, i  # swaps i and j
-        word = word[:i] + word[j] + word[i + 1:j] + word[i] + word[j + 1:]
-        log.debug("flip change---after: %s" % word)
-        return word
+        uword = word[:i] + word[j] + word[i + 1:j] + word[i] + word[j + 1:]
+        log.debug("[flip char] {} -> {}: %s".format(word, uword))
+        return uword
 
 
     def repeat_char(self, word):
@@ -116,8 +111,7 @@ class WordNoiser():
         Randomly repeat a letter in a word.
         """
 
-        log.debug("repeat change---before: %s" % word)
         pos = utils.rand_index(word)
-        word = word[:pos] + word[pos] + word[pos:]
-        log.debug("repeat change---after: %s" % word)
-        return word
+        uword = word[:pos] + word[pos] + word[pos:]
+        log.debug("[repeat char] {} -> {}: %s".format(word, uword))
+        return uword
