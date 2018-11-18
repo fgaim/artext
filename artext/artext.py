@@ -122,23 +122,24 @@ class Artext:
         for tok in parsed_sent:
             rand1, rand2 = random.random(), random.random()
 
-            if tok.text.lower() in self.protected_tokens:
+            if rand1 < prob or tok.text.lower() in self.protected_tokens:
+                # do not noise token
                 noised_sent.append(tok.text)
                 continue
 
             # Orthographic errors
-            if rand1 >= prob and rand2 <= self.error_typo and len(tok.text) > 4:
+            if rand2 <= self.error_typo and len(tok.text) > 4:
                 typo = self.word_noiser.noise_word(tok.text)
                 noised_sent.append(typo)
 
             # Swap current and previous words
-            elif rand1 >= prob and rand2 <= self.error_swap and len(noised_sent) > 1:
+            elif rand2 <= self.error_swap and len(noised_sent) > 1:
                 prev_tok = noised_sent.pop()
                 noised_sent.append(tok.text)
                 noised_sent.append(prev_tok)
 
             # Determiners/Articles
-            elif rand1 >= prob and tok.tag_ == self.pos_det:
+            elif tok.tag_ == self.pos_det:
                 if tok.text.lower() in self.determiner_list:
                     if rand2 <= 0.15:
                         noised_sent.append('a')
@@ -159,7 +160,7 @@ class Artext:
                         pass
 
             # Prepositions
-            elif rand1 >= prob and tok.tag_ == self.pos_prep and tok.text.lower() in self.prep_list:
+            elif tok.tag_ == self.pos_prep and tok.text.lower() in self.prep_list:
                 if rand2 <= 0.10:
                     noised_sent.append('in')
                 elif rand2 <= 0.20:
@@ -174,7 +175,7 @@ class Artext:
                     pass
 
             # Nouns
-            elif rand1 >= prob and tok.tag_ in self.pos_noun:
+            elif tok.tag_ in self.pos_noun:
                 if rand2 <= 0.45:
                     noised_sent.append(self.singularize_noun(tok.text))
                 elif rand2 <= 0.80:
@@ -188,7 +189,7 @@ class Artext:
                     noised_sent.append(tok.text)
 
             # Verbs
-            elif rand1 >= prob and tok.tag_ in self.pos_verb:
+            elif tok.tag_ in self.pos_verb:
                 if rand2 <= 0.20:
                     noised_sent.append(tok.lemma_)
                 elif rand2 <= 0.45:
@@ -204,7 +205,7 @@ class Artext:
                     noised_sent.append(tok.text)
 
             # Adverbs
-            elif rand1 >= prob and tok.tag_ in self.pos_adv:
+            elif tok.tag_ in self.pos_adv:
                 if rand2 <= 0.35:
                     synonyms = self.synonyms_adv(tok.text)
                     if not len(synonyms):
@@ -214,7 +215,7 @@ class Artext:
                     noised_sent.append(tok.text)
 
             # Adjectives
-            elif rand1 >= prob and tok.tag_ in self.pos_adj:
+            elif tok.tag_ in self.pos_adj:
                 if rand2 <= 0.40:
                     noised_sent.append(self.pluralize_adj(tok.text))
                 elif rand2 <= 0.60:
@@ -228,7 +229,7 @@ class Artext:
                     pass
 
             # Punctuation
-            elif rand1 >= prob and tok.tag_ in self.punc_list:
+            elif tok.tag_ in self.punc_list:
                 if rand2 <= 0.60:
                     noised_sent.append(tok.text)
                 elif rand2 <= 0.80:
@@ -236,17 +237,18 @@ class Artext:
                 else:
                     pass
 
+            else:
+                log.debug('UNK POS [{}]'.format(tok.tag_))
+
             # After exhausting other schemes double-up for Orthographic errors
-            elif rand1 >= prob and (rand2/2) <= self.error_typo and len(tok.text) > 3:
+            if (rand2/2) <= self.error_typo and len(tok.text) > 3:
                 typo = self.word_noiser.noise_word(tok.text)
                 noised_sent.append(typo)
-
             else:
                 noised_sent.append(tok.text)
-                log.debug('UNK POS: ' + tok.tag_)
 
             # Add redundant punctuation
-            if rand1 >= prob and tok.tag_ not in self.punc_list:
+            if tok.tag_ not in self.punc_list:
                 if rand2 <= 0.01:
                     noised_sent.append(random.sample(self.punc_list, 1)[0])
 
