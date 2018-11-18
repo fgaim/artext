@@ -25,7 +25,7 @@ class Artext:
     def __init__(self, config=Config()):
         self.config = config
 
-        self.error_overall = self.config.error_overall
+        self.error_rate = self.config.error_rate
         self.error_typo = self.config.error_rate_typo
         self.error_swap = self.config.error_rate_swap
         self.prep_list = self.config.target_preposition
@@ -117,29 +117,33 @@ class Artext:
             str: noised sentence
         """
         noised_sent = []
-        prob = 1. - self.config.error_rate_overall
 
         for tok in parsed_sent:
-            rand1, rand2 = random.random(), random.random()
+            rand1 = random.random()
 
-            if rand1 < prob or tok.text.lower() in self.protected_tokens:
+            if rand1 > self.error_rate or tok.text.lower() in self.protected_tokens:
                 # do not noise token
                 noised_sent.append(tok.text)
                 continue
 
             # Orthographic errors
-            if rand2 <= self.error_typo and len(tok.text) > 4:
+            if random.random() <= self.error_typo and len(tok.text) > 4:
                 typo = self.word_noiser.noise_word(tok.text)
                 noised_sent.append(typo)
+                continue
 
             # Swap current and previous words
-            elif rand2 <= self.error_swap and len(noised_sent) > 1:
+            if random.random() <= self.error_swap and len(noised_sent) > 2:
                 prev_tok = noised_sent.pop()
                 noised_sent.append(tok.text)
                 noised_sent.append(prev_tok)
+                continue
+
+            # POS based noising
+            rand2 = random.random()
 
             # Determiners/Articles
-            elif tok.tag_ == self.pos_det:
+            if tok.tag_ == self.pos_det:
                 if tok.text.lower() in self.determiner_list:
                     if rand2 <= 0.15:
                         noised_sent.append('a')
