@@ -240,12 +240,12 @@ class Artext:
             else:
                 log.debug('UNK POS [{}]'.format(tok.tag_))
 
-            # After exhausting other schemes double-up for Orthographic errors
-            if (rand2/2) <= self.error_typo and len(tok.text) > 3:
-                typo = self.word_noiser.noise_word(tok.text)
-                noised_sent.append(typo)
-            else:
-                noised_sent.append(tok.text)
+                # After exhausting other schemes double-up for Orthographic errors
+                if (rand2/2) <= self.error_typo and len(tok.text) > 3:
+                    typo = self.word_noiser.noise_word(tok.text)
+                    noised_sent.append(typo)
+                else:
+                    noised_sent.append(tok.text)
 
             # Add redundant punctuation
             if tok.tag_ not in self.punc_list:
