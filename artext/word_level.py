@@ -17,9 +17,10 @@ class WordNoiser():
 
     def noise_word(self, word):
         rand = random.random()
-        if rand <= 0.20:
+        wlen = len(word)
+        if wlen > 7 and rand <= 0.25:
             injections = 3
-        elif rand <= 0.55:
+        elif wlen > 5 and rand <= 0.50:
             injections = 2
         else:
             injections = 1
@@ -27,9 +28,9 @@ class WordNoiser():
 
         # handle capitalization separately
         rand = random.random()
-        if rand >= 75:
+        if rand >= 0.75:
             rand = random.random()
-            if rand <= 75:
+            if rand <= 0.75:
                 uword = uword.lower()
             else:
                 uword = uword.capitalize()
@@ -47,8 +48,6 @@ class WordNoiser():
                 uword = self.flip_char(uword)
             elif rand <= 0.90:
                 uword = self.repeat_char(uword)
-            elif rand <= 0.95:
-                uword = self.swap_char(uword)
             else:
                 pass
 
