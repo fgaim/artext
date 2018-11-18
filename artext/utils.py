@@ -5,13 +5,13 @@ import operator
 import argparse
 
 
+
+# Log to console
 log = logging.getLogger('artext')
 fmt = '%(asctime)s %(levelname)s:%(message)s '
-logging.basicConfig(format='', level=logging.INFO, datefmt='%Y:%m:%d %I:%M:%S')
-fh = logging.FileHandler('log.txt')
-log.addHandler(fh)
-console = logging.StreamHandler()
-log.addHandler(console)
+logging.basicConfig(format=fmt, level=logging.INFO, datefmt='%Y:%m:%d %I:%M:%S')
+ch = logging.StreamHandler()
+log.addHandler(ch)
 
 
 def arg_parser():
