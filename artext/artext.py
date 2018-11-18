@@ -255,24 +255,39 @@ class Artext:
         return self.detok([t for t in noised_sent if t])
 
     def singularize_noun(self, word):
-        uw = self.inf.singular_noun(word)
-        return uw if uw else word
+        try:
+            uw = self.inf.singular_noun(word)
+            return uw if uw else word
+        except:
+            return word
 
     def pluralize(self, word):
-        uw = self.inf.plural(word)
-        return uw if uw else word
+        try:
+            uw = self.inf.plural(word)
+            return uw if uw else word
+        except:
+            return word
 
     def pluralize_verb(self, word):
-        uw = self.inf.plural_verb(word)
-        return uw if uw else word
+        try:
+            uw = self.inf.plural_verb(word)
+            return uw if uw else word
+        except:
+            return word
 
     def pluralize_adj(self, word):
-        uw = self.inf.plural_adj(word)
-        return uw if uw else word
+        try:
+            uw = self.inf.plural_adj(word)
+            return uw if uw else word
+        except:
+            return word
 
     def present_participle(self, word):
-        uw = self.inf.present_participle(word)
-        return uw if uw else word
+        try:
+            uw = self.inf.present_participle(word)
+            return uw if uw else word
+        except:
+            return word
 
     def get_sysnonyms(self, word, pos):
         assert word, 'No word!'
