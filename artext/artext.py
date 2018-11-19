@@ -102,8 +102,8 @@ class Artext:
             # Keep some (10%) sentences clean
             cln = []
             rand = random.random()
-            if samples > 1 and rand >= 0.90:
-                cln_samples = random.randint(0, samples-1)
+            if samples > 1 and rand < 0.10:
+                cln_samples = random.randint(0, int(samples/2))
                 cln = [sent.text] * cln_samples
                 samples -= cln_samples
 
