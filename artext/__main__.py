@@ -1,9 +1,13 @@
+from artext import __version__
 from artext import config
 from artext import utils
 from artext.artext import Artext
 
-if __name__ == "__main__":
+
+def main():
     parser = utils.arg_parser()
+    parser.add_argument('-v', '--version', action='version',
+                        version=('artext %s' % __version__))
     args = parser.parse_args()
 
     conf = config.Config()
@@ -23,3 +27,7 @@ if __name__ == "__main__":
             for line in fin:
                 noises = artxt.noise_document(line)
                 fout.write("{}\n".format(args.separator.join(noises)))
+
+
+if __name__ == "__main__":
+    main()
