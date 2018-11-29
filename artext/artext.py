@@ -1,7 +1,4 @@
-import sys
-import os
 import random
-import string
 
 import spacy
 from spacy.symbols import ORTH
@@ -147,7 +144,8 @@ class Artext:
         for tok in parsed_sent:
             rand1 = random.random()
 
-            if rand1 > self.error_rate or tok.text.lower() in self.protected_tokens:
+            if rand1 > self.error_rate or \
+                    tok.text.lower() in self.protected_tokens:
                 # do not noise token
                 noised_sent.append(tok.text)
                 continue
@@ -190,7 +188,8 @@ class Artext:
                         pass
 
             # Prepositions
-            elif tok.tag_ == self.pos_prep and tok.text.lower() in self.prep_list:
+            elif tok.tag_ == self.pos_prep and \
+                    tok.text.lower() in self.prep_list:
                 if rand2 <= 0.10:
                     noised_sent.append('in')
                 elif rand2 <= 0.20:
@@ -270,7 +269,7 @@ class Artext:
             else:
                 log.debug('UNK POS [{}]'.format(tok.tag_))
 
-                # After exhausting other schemes double-up for Orthographic errors
+                # After exhausting others double-up for Orthographic errors
                 if (rand2/2) <= self.error_typo and len(tok.text) > 3:
                     typo = self.word_noiser.noise_word(tok.text)
                     noised_sent.append(typo)
@@ -291,35 +290,40 @@ class Artext:
         try:
             uw = self.inflect.singular_noun(word)
             return uw if uw else word
-        except:
+        except Exception as e:
+            log.debug(getattr(e, 'message', str(e)))
             return word
 
     def pluralize(self, word):
         try:
             uw = self.inflect.plural(word)
             return uw if uw else word
-        except:
+        except Exception as e:
+            log.debug(getattr(e, 'message', str(e)))
             return word
 
     def pluralize_verb(self, word):
         try:
             uw = self.inflect.plural_verb(word)
             return uw if uw else word
-        except:
+        except Exception as e:
+            log.debug(getattr(e, 'message', str(e)))
             return word
 
     def pluralize_adj(self, word):
         try:
             uw = self.inflect.plural_adj(word)
             return uw if uw else word
-        except:
+        except Exception as e:
+            log.debug(getattr(e, 'message', str(e)))
             return word
 
     def present_participle(self, word):
         try:
             uw = self.inflect.present_participle(word)
             return uw if uw else word
-        except:
+        except Exception as e:
+            log.debug(getattr(e, 'message', str(e)))
             return word
 
     def get_sysnonyms(self, word, pos):
