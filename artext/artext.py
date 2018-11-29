@@ -83,12 +83,13 @@ class Artext:
             self.nlp.tokenizer.add_special_case(pt, [{ORTH: pt}])
 
 
-    def noise_document(self, doc):
+    def noise_document(self, doc, detok=True):
         """
         Generates 'samples' number of noises for a document.
 
         Args:
             doc: str, multi-sentence text
+            detok: bool, whether to detokenize output or not
 
         Returns:
             tuple: noises
@@ -110,7 +111,7 @@ class Artext:
             # Inject noise
             noises = set()
             while len(noises) < samples:
-                noises.add(self._inject_noise(sent))
+                noises.add(self._inject_noise(sent, detok))
 
             # Collect and shuffle
             noises = list(noises) + cln
@@ -120,12 +121,13 @@ class Artext:
 
         return tuple(' '.join(ns) for ns in zip(*doc_noises))
 
-    def noise_sentence(self, sent):
+    def noise_sentence(self, sent, detok=True):
         """
         Generates 'samples' number of noises for a sentence.
 
         Args:
             sent: str, a sentence
+            detok: bool, whether to detokenize output or not
 
         Returns:
             tuple: noises
@@ -134,11 +136,11 @@ class Artext:
 
         noises = set()
         while len(noises) < self.samples:
-            noises.add(self._inject_noise(parsed_sent))
+            noises.add(self._inject_noise(parsed_sent, detok))
 
         return tuple(noises)
 
-    def _inject_noise(self, parsed_sent):
+    def _inject_noise(self, parsed_sent, detok=True):
         """
         Inject errors according to an overall rate.
 
@@ -285,7 +287,11 @@ class Artext:
                 if rand2 <= 0.01:
                     noised_sent.append(random.sample(self.punc_list, 1)[0])
 
-        return self.detok([t for t in noised_sent if t])
+        if detok:
+            return self.detok([t for t in noised_sent if t])
+        else:
+            return ' '.join([t for t in noised_sent if t])
+
 
     def singularize_noun(self, word):
         try:
