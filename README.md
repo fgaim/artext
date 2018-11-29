@@ -1,22 +1,19 @@
-# Artext: Artificial Text Generation
-
 [![LICENSE](https://img.shields.io/github/license/fgaim/artext.svg)](https://github.com/fgaim/artext/blob/master/LICENSE)
 ![GitHub issues](https://img.shields.io/github/issues/fgaim/artext.svg)
 [![PyPI](https://img.shields.io/pypi/v/artext.svg)](https://pypi.org/project/artext/)
 [![CircleCI](https://circleci.com/gh/fgaim/artext.svg?style=shield)](https://circleci.com/gh/fgaim/artext)
 
-
+# Artext: Artificial Text Generation
 ## Probabilistic Noising of Natural Language
 
 Artext is a work on injecting noise into text without affecting the core meaning for a human reader.
 This kind of data can be useful for many NLP tasks, particulary in making models robust to noisy/erroneous input.
 
 
+Note: Noising will generally increase the vocabulary size of the data sets, as it introduces word inflections and orthographic variations that may not have existed before. Therefore, it should be used with caution, especially for closed-vocabulary neural network models such as machine translation. In such scenarios, consider using subword based vocabulary (`BPE` for instance).
+
 This is a work in progress, and the result of our experiments we will published soon.
 Meanwhile, if you use `artext` in your research please cite this repository.
-
-> Note: Noising will generally increase the vocabulary size of the data sets, as it introduces word inflections and orthographic variations that may not have existed before. Therefore, use it with caution, especially for closed-vocabulary neural network models such as machine translation. Consider using subword based vocabulary (`BPE` for instance) in such scenarios.
-
 
 
 ## Setup
