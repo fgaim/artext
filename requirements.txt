@@ -3,3 +3,4 @@ spacy==2.0.11
 flake8
 pytest
 pytest-cov
+pytest-benchmark
