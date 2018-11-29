@@ -1,4 +1,3 @@
-import string
 import random
 import logging
 import argparse
@@ -23,15 +22,16 @@ def arg_parser():
     parser.add_argument('-out', '--output', type=str, required=True,
                         help='Path to ouput text file')
     parser.add_argument('-n', '--samples', type=int, default=1,
-                        help='Number of noise samples to generate per sentence')
+                        help='Number of noise samples to generate')
     parser.add_argument('-sep', '--separator', type=str, default='\n',
                         help='String to separate noise samples of a sentence')
     parser.add_argument('-er', '--error_rate', type=float, default=0.25,
                         help='Error rate in decimal, eg. 0.25')
-    parser.add_argument('-l', '--level', choices=['sent', 'doc'], default='sent',
-                        help='Level at which to generate noises')
+    parser.add_argument('-l', '--level', choices=['sent', 'doc'],
+                        default='sent',
+                        help='Generate noise at sentence/document level')
     parser.add_argument('-pt', '--protected_tokens', type=str, default=None,
-                        help='A file listing tokens to be excluded from noising')
+                        help='File listing tokens to exclud during noising')
 
     return parser
 

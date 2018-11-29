@@ -10,10 +10,12 @@ class Config:
 
     # [preposition]
     pos_preposition = ['IN']
-    target_preposition = ['with', 'at', 'from', 'into', 'of', 'to', 'in', 'for', 'on', 'by']
-    target_preposition_full = ['with', 'at', 'from', 'into', 'during', 'until', 'of', 'to', 
-                            'in', 'for', 'on', 'by', 'about', 'before', 'without', 'after', 
-                            'under', 'within', 'along', 'through']
+    target_preposition = ['with', 'at', 'from',
+                          'into', 'of', 'to', 'in', 'for', 'on', 'by']
+    target_preposition_full = ['with', 'at', 'from', 'into', 'during',
+                               'until', 'of', 'to', 'in', 'for', 'on',
+                               'by', 'about', 'before', 'without', 'after',
+                               'under', 'within', 'along', 'through']
     error_rate_preposition = 0.5
     error_rate_preposition_ins_del_replace = ['1', '1', '1']
 
