@@ -19,9 +19,10 @@ class TestArtext():
         artxt = Artext(config=conf)
 
         # Sentence Level
-        sent = "This person tried to keep an eye on the president while doing his work."
+        sent = "This person tried to keep an eye on the president while "
+        "doing his work."
         noises = artxt.noise_sentence(sent)
-        assert noises != None
+        assert noises is not None
         assert len(noises) == conf.samples
 
     def test_noise_document(self):
@@ -30,11 +31,16 @@ class TestArtext():
         artxt = Artext(config=conf)
 
         # Document Level
-        doc = "I went to Iceland for vacation. The top of the mountain was very cold. Fortunately, I was wearing snowboard gear."
+        doc = "I went to Iceland for vacation. The top of the mountain was "
+        "very cold. Fortunately, I was wearing snowboard gear."
         noises = artxt.noise_document(doc)
-        assert noises != None
+        assert noises is not None
         assert len(noises) == conf.samples
 
-    def test(self):
-        # TODO: Write proper test here
-        pass
+    def test_word_noise(self):
+        from artext.word_level import WordNoiser
+        wnoiser = WordNoiser()
+        word = 'Mountain'
+        uword = wnoiser.noise_word(word)
+        assert uword is not None
+        assert uword != word
