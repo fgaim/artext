@@ -1,7 +1,9 @@
 __pycache__
 .vscode/
+.pytest_cache/
 dist/
 build/
+tmp/
 artext.egg-info/
 log.txt
 pypi.sh
