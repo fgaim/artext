@@ -1,9 +1,3 @@
-import sys
-import os
-import random
-import argparse
-import configparser as ConfigParser
-
 from artext import config, utils, Artext
 
 
@@ -15,7 +9,6 @@ if __name__ == "__main__":
     conf.error_rate = args.error_rate
     conf.path_protected_tokens = args.protected_tokens
     conf.samples = args.samples
-    conf.separator = args.separator
 
     artxt = Artext(config=conf)
 
