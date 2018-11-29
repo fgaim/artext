@@ -131,7 +131,8 @@ class WordNoiser():
         if len(idxs) > 1:
             idxs = random.sample(idxs, 1)
         idx = idxs[0]
-        uword = word[:idx] + word[idx+1] + word[idx] + (word[idx+2:] if len(word) > idx+1 else '')
+        uword = word[:idx] + word[idx+1] + word[idx] + \
+            (word[idx+2:] if len(word) > idx+1 else '')
         return uword
 
     def flip_rand_pairs(self, word):
