@@ -37,7 +37,7 @@ I hope this band did n't become worse yet like many others big ones and I'll enj
 Well , there remains to get it and check it out."""
 
     print('Input (Lang-8 target):\n{}\n'.format(doc))
-    print('Human (Lang-8 source):\n{}\n'.format(earner))
+    print('Human (Lang-8 source):\n{}\n'.format(learner))
     noises = artxt.noise_document(doc)
     print('Artext:')
     for noise in noises:
