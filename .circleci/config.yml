@@ -33,6 +33,9 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
+            python -m spacy download 'en_core_web_sm'
+            python -m nltk.downloader 'punkt'
+            python -m nltk.downloader 'wordnet'
 
       - save_cache:
           paths:
@@ -43,7 +46,8 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            python -m unittest test.ArtextTestCase.test
+            flake8 --exclude=venv*,example.py,artext/inflect.py --statistics
+            pytest -v --cov=artext
 
       - store_artifacts:
           path: test-reports
