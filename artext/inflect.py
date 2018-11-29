@@ -1,17 +1,18 @@
 '''
     This code is based on JazzBand's work, with some modifications relevant for artext.
 
-    As in the original, this file is licensed under the GNU General Public License, see <http://www.gnu.org/licenses/>.
+    As in the original, this file is licensed under the GNU General Public License, 
+    see <http://www.gnu.org/licenses/>.
 
 methods:
-          classical inflect
-          plural plural_noun plural_verb plural_adj singular_noun no num a an
-          compare compare_nouns compare_verbs compare_adjs
-          present_participle
-          ordinal
-          number_to_words
-          join
-          defnoun defverb defadj defa defan
+    classical inflect
+    plural plural_noun plural_verb plural_adj singular_noun no num a an
+    compare compare_nouns compare_verbs compare_adjs
+    present_participle
+    ordinal
+    number_to_words
+    join
+    defnoun defverb defadj defa defan
 
     INFLECTIONS:    classical inflect
           plural plural_noun plural_verb plural_adj singular_noun compare

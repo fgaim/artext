@@ -5,17 +5,14 @@ from artext import utils
 from artext.utils import log
 
 
-
 class WordNoiser():
     """
     Handles word level noise injection.
     """
 
-
     def __init__(self):
         self.vowel_pairs = re.compile(r'([aeiou][aeiou])')
         self.consonant_pairs = re.compile(r'(gh)|(ng)|(gn)|(th)|(ou)|(sc)')
-
 
     def noise_word(self, word):
         rand = random.random()
@@ -46,15 +43,16 @@ class WordNoiser():
                 uword = self.add_char(uword)
             elif rand <= 0.55:
                 uword = self.repeat_char(uword)
-            elif rand <= 0.83:
+            elif rand <= 0.85:
                 uword = self.flip_chars(uword)
-            elif rand <= 0.90:
+            elif rand <= 0.95:
                 uword = self.swap_chars(uword)
             else:
                 pass
 
+        if word == uword:
+            return self.noise_word(word)
         return uword
-
 
     def drop_char(self, word):
         """
@@ -69,7 +67,6 @@ class WordNoiser():
         log.debug("[drop char] {} -> {}: %s".format(word, uword))
         return uword
 
-
     def add_char(self, word):
         """
         Randomly add a vowel or a letter from a word.
@@ -81,7 +78,6 @@ class WordNoiser():
         log.debug("[add char] {} -> {}: %s".format(word, uword))
         return uword
 
-
     def repeat_char(self, word):
         """
         Randomly repeat a letter in a word.
@@ -91,7 +87,6 @@ class WordNoiser():
         uword = word[:pos] + word[pos] + word[pos:]
         log.debug("[repeat char] {} -> {}: %s".format(word, uword))
         return uword
-
 
     def flip_chars(self, word):
         """
@@ -111,7 +106,6 @@ class WordNoiser():
         log.debug("[flip char] {} -> {}: %s".format(word, uword))
         return uword
 
-
     def flip_vowel_pairs(self, word):
         """
         Flip a vowel pair in a word.
@@ -125,7 +119,6 @@ class WordNoiser():
         pair = vowels[0]
         uword = word.replace(pair, pair[::-1], 1)
         return uword
-
 
     def flip_consonant_pairs(self, word):
         """
@@ -141,7 +134,6 @@ class WordNoiser():
         uword = word[:idx] + word[idx+1] + word[idx] + (word[idx+2:] if len(word) > idx+1 else '')
         return uword
 
-
     def flip_rand_pairs(self, word):
         """
         Randomly flip two neighboring letters in a word.
@@ -151,7 +143,6 @@ class WordNoiser():
         i, j = (pos - 1, pos) if pos > 0 else (pos, pos + 1)
         uword = word[:i] + word[j] + word[i] + word[j + 1:]
         return uword
-
 
     def swap_chars(self, word):
         """

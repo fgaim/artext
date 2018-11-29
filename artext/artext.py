@@ -14,7 +14,6 @@ from artext.inflect import Inflect
 from artext.word_level import WordNoiser
 
 
-
 class Artext:
     """
     Artificial noise generation of Natural Language.
@@ -43,10 +42,8 @@ class Artext:
         self.detok = TreebankWordDetokenizer().detokenize
         self.nlp = spacy.load('en_core_web_sm')
 
-        # load protected list
         self.protected_tokens = set()
         self.load_protected_tokens_from_path(self.config.path_protected_tokens)
-
 
     def load_protected_tokens_from_path(self, path):
         """
@@ -64,7 +61,6 @@ class Artext:
             ptoks = fin.readlines()
             self.add_protected_tokens(ptoks)
 
-
     def add_protected_tokens(self, ptoks):
         """
         Adds protected tokens that will be skipped during noising.
@@ -81,7 +77,6 @@ class Artext:
 
         for pt in new_pts:
             self.nlp.tokenizer.add_special_case(pt, [{ORTH: pt}])
-
 
     def noise_document(self, doc, detok=True):
         """
@@ -291,7 +286,6 @@ class Artext:
             return self.detok([t for t in noised_sent if t])
         else:
             return ' '.join([t for t in noised_sent if t])
-
 
     def singularize_noun(self, word):
         try:

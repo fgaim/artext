@@ -1,15 +1,14 @@
 import string
 import random
 import logging
-import operator
 import argparse
-
 
 
 # Log to console
 log = logging.getLogger('ARTEXT')
 fmt = '%(name)s %(asctime)s %(levelname)s: %(message)s'
-logging.basicConfig(format=fmt, level=logging.INFO, datefmt='%Y:%m:%d %I:%M:%S')
+logging.basicConfig(format=fmt, level=logging.INFO,
+                    datefmt='%Y:%m:%d %I:%M:%S')
 ch = logging.StreamHandler()
 log.addHandler(ch)
 
